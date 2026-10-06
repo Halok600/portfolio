@@ -1,0 +1,217 @@
+{
+  "version": 1,
+  "settings": { "accent": "cyan", "defaultTheme": "dark" },
+  "profile": {
+    "name": "Priyanshu Tiwari",
+    "headline": "AI/ML Engineer",
+    "tagline": "I build ML systems end to end, from training the model to shipping the service.",
+    "status": { "show": true, "text": "Open to AI/ML and SDE roles" },
+    "location": "Noida, India",
+    "email": "pkt.codes@gmail.com",
+    "links": {
+      "github": "https://github.com/Halok600",
+      "linkedin": "https://www.linkedin.com/in/priyanshu0604",
+      "leetcode": "https://leetcode.com/u/priyanshuthebest2"
+    },
+    "resumePdf": "/resume.pdf"
+  },
+  "sections": [
+    { "id": "hero", "title": "Hero", "visible": true },
+    { "id": "tryPolyo", "title": "Try PolyO", "visible": true },
+    { "id": "featured", "title": "Featured work", "visible": true },
+    { "id": "projects", "title": "More projects", "visible": true },
+    { "id": "experience", "title": "Experience", "visible": true },
+    { "id": "dsa", "title": "Problem solving", "visible": true },
+    { "id": "skills", "title": "Skills", "visible": true },
+    { "id": "achievements", "title": "Achievements", "visible": true },
+    { "id": "education", "title": "Education", "visible": true },
+    { "id": "contact", "title": "Contact", "visible": true }
+  ],
+  "projects": [
+    {
+      "id": "polyo",
+      "slug": "polyo",
+      "title": "PolyO",
+      "oneLiner": "Static, multi-language time and space complexity prediction from source code. No LLM calls, no execution at inference time.",
+      "stack": ["Python", "PyTorch", "tree-sitter", "LightGBM", "FastAPI", "Docker", "GitHub Actions"],
+      "bullets": [
+        "Built an **ML service that predicts worst-case time and space complexity** of source code in **six languages** (Python, C++, Java, JavaScript, C, Go) just by reading it, with **no code execution and no LLM calls** at inference.",
+        "Normalised all six languages into **one shared representation** with **tree-sitter**, so a single model serves every language. Trained on **194,000 labelled programs** with problem-level splits **enforced by a CI test** to block data leakage.",
+        "Built and benchmarked **four models** on one held-out set, from a rule baseline up to a **graph neural network**. The GNN reached **0.377 / 0.336 macro-F1**, matching a zero-shot LLM on time and **beating it on space** at zero API cost.",
+        "Shipped it as a **FastAPI** service in **Docker** with **GitHub Actions CI**, rewriting the GNN forward pass in **NumPy** to drop PyTorch from the image, verified identical to the trained model **within 1e-4**."
+      ],
+      "links": { "github": "https://github.com/Halok600/polyo", "live": "https://polyo.vercel.app" },
+      "featured": true,
+      "visible": true
+    },
+    {
+      "id": "aerial-guardian",
+      "slug": "aerial-guardian",
+      "title": "The Aerial Guardian",
+      "oneLiner": "Real-time multi-object tracking for drone footage that runs fully client-side in the browser.",
+      "stack": ["Python", "PyTorch", "YOLOv8", "OpenCV", "ONNX Runtime Web", "JavaScript"],
+      "bullets": [
+        "Built a **real-time multi-object tracking system** for drone video that runs **entirely client-side in the browser**, porting both detector and tracker to **ONNX Runtime Web** so the video never leaves the user's device.",
+        "Stock YOLOv8 misses people in aerial footage because they are only **8 to 16 pixels tall**, so added a **high-resolution stride-4 detection head** to the network and retrained it on the **VisDrone** dataset on a single 6 GB laptop GPU.",
+        "**Implemented ByteTrack from scratch**: a **Kalman filter** for motion prediction plus **three-stage Hungarian matching** to hold object identities through occlusion, with **OpenCV** cancelling the drone's own camera motion."
+      ],
+      "links": {
+        "github": "https://github.com/Halok600/The-Aerial-Guardian",
+        "live": "https://halok600.github.io/The-Aerial-Guardian/"
+      },
+      "featured": true,
+      "visible": true
+    },
+    {
+      "id": "enagram",
+      "slug": "enagram",
+      "title": "Enagram.io",
+      "oneLiner": "Conversational AI agent over Gmail, Drive and Calendar.",
+      "stack": ["Next.js", "TypeScript", "PostgreSQL", "pgvector", "Gemini", "OAuth 2.0"],
+      "bullets": [
+        "Built a **conversational AI agent** that answers one question across a user's **Gmail, Drive and Calendar** in a single reply, linking the same person, project or file across all three services.",
+        "Designed a **hybrid RAG retrieval layer** on **PostgreSQL + pgvector**, combining vector embeddings with keyword search so exact strings such as an invoice number are still found.",
+        "Added **agent tool-calling** that creates and updates Calendar events and drafts Gmail replies inside the correct thread, all behind **Google OAuth** with per-user access scoping."
+      ],
+      "links": { "github": "https://github.com/Halok600/Enagram.io", "live": "https://enagram-io.vercel.app" },
+      "featured": true,
+      "visible": true
+    },
+    {
+      "id": "weaponshield",
+      "slug": "weaponshield",
+      "title": "WeaponShield AI",
+      "oneLiner": "Real-time weapon detection (pistol, rifle, knife) for CCTV, images and webcam. Two-stage YOLOv8s fine-tune on 31.6k images, 0.833 mAP50, dual PyTorch/ONNX inference.",
+      "stack": ["Python", "PyTorch", "YOLOv8", "ONNX Runtime", "FastAPI", "React"],
+      "bullets": [
+        "Built **real-time weapon detection** (pistol, rifle, knife) for CCTV, images and live webcam, fine-tuning **YOLOv8s** in two stages on **31,600 images** to reach **0.833 mAP50**.",
+        "Served it through a **FastAPI** backend with **dual PyTorch / ONNX Runtime engines**, and cut false alarms with **K-of-N multi-frame confirmation** that alerts only when a detection persists across frames."
+      ],
+      "links": { "github": "https://github.com/Halok600/WeaponShield-AI" },
+      "featured": false,
+      "visible": true
+    },
+    {
+      "id": "medfusion",
+      "slug": "medfusion",
+      "title": "MedFusionAI",
+      "oneLiner": "CT-MRI medical image fusion with a hybrid Transformer-CNN and cross-attention, trained unsupervised. Sobel edge preservation, 4-term loss, 12+ evaluation metrics.",
+      "stack": ["Python", "Transformer", "CNN", "Cross-attention"],
+      "bullets": [],
+      "links": { "github": "https://github.com/Halok600/MedFusionAI" },
+      "featured": false,
+      "visible": false
+    },
+    {
+      "id": "drone-tilt-detection",
+      "slug": "drone-tilt-detection",
+      "title": "drone-tilt-detection",
+      "oneLiner": "Embedded TinyML: a TFLite tilt classifier trained on MPU6050 IMU data and converted to a C byte array, with ESP32-S3 complementary-filter firmware for attitude estimation.",
+      "stack": ["TFLite", "ESP32-S3", "MPU6050", "C"],
+      "bullets": [],
+      "links": { "github": "https://github.com/Halok600/drone-tilt-detection" },
+      "featured": false,
+      "visible": false
+    },
+    {
+      "id": "leehint",
+      "slug": "leehint",
+      "title": "Leehint",
+      "oneLiner": "Chrome extension giving progressive AI hints on LeetCode problems via Gemini. It nudges you toward the answer instead of spoiling it.",
+      "stack": ["JavaScript", "Chrome Extension", "Gemini"],
+      "bullets": [],
+      "links": { "github": "https://github.com/Halok600/Leehint" },
+      "featured": false,
+      "visible": false
+    },
+    {
+      "id": "reddit-insights",
+      "slug": "reddit-insights",
+      "title": "reddit-insights",
+      "oneLiner": "Reddit discussion analysis: RoBERTa sentiment, DistilRoBERTa emotion detection, LDA topic modeling, GPT-2 summarisation.",
+      "stack": ["RoBERTa", "DistilRoBERTa", "LDA", "GPT-2"],
+      "bullets": [],
+      "links": { "github": "https://github.com/Halok600/reddit-insights" },
+      "featured": false,
+      "visible": false
+    }
+  ],
+  "experience": [
+    {
+      "id": "india-space-lab",
+      "org": "India Space Lab",
+      "role": "Embedded Systems Intern",
+      "location": "New Delhi, India (Remote)",
+      "start": "Jun 2025",
+      "end": "Jul 2025",
+      "bullets": [
+        "Built a **real-time drone tilt detection system** on an **ESP32-S3** with an **MPU6050** IMU, sampling **6 axes at 100 Hz** and driving OLED, LED and buzzer alerts the moment tilt crosses a **45 degree** safety threshold.",
+        "Wrote **C++ firmware** that fuses accelerometer and gyroscope readings through a tuned **complementary filter** (alpha 0.96) into one stable attitude estimate, removing gyro drift and vibration noise using a timestep measured with **micros()**.",
+        "Trained a **TensorFlow / Keras** neural network on labelled IMU data to classify safe versus dangerous tilt, then compressed it to a **2.5 KB TensorFlow Lite** model exported as a C byte array that fits in microcontroller flash.",
+        "Designed and simulated the full circuit in **Wokwi**, with the IMU and a 128x64 OLED sharing one **I2C** bus plus three GPIO alert outputs, and documented wiring and thresholds so the build is **reproducible from the repository alone**."
+      ],
+      "link": "https://github.com/Halok600/drone-tilt-detection",
+      "visible": true
+    }
+  ],
+  "education": [
+    {
+      "id": "jiit",
+      "school": "Jaypee Institute of Information Technology",
+      "degree": "Bachelor of Technology in Computer Science and Engineering",
+      "start": "Sep 2022",
+      "end": "Sep 2026",
+      "location": "Noida, India",
+      "visible": true
+    }
+  ],
+  "skills": [
+    { "id": "languages", "label": "Languages", "items": ["Python", "C++", "JavaScript", "SQL", "Java"] },
+    {
+      "id": "ai-ml",
+      "label": "AI and ML",
+      "items": [
+        "PyTorch", "TensorFlow", "YOLOv8", "OpenCV", "scikit-learn", "LightGBM",
+        "Graph Neural Networks", "Computer Vision", "Object Detection and Tracking",
+        "RAG", "Vector Search", "LLM APIs (Gemini)"
+      ]
+    },
+    {
+      "id": "backend-data",
+      "label": "Backend and Data",
+      "items": ["REST APIs", "Node.js", "FastAPI", "PostgreSQL", "pgvector", "MongoDB", "NumPy", "Pandas"]
+    },
+    { "id": "frontend", "label": "Frontend", "items": ["Next.js", "React", "Tailwind CSS", "HTML5"] },
+    {
+      "id": "developer-tools",
+      "label": "Developer Tools",
+      "items": ["Docker", "Git", "GitHub Actions (CI/CD) basics", "Linux", "Postman"]
+    },
+    {
+      "id": "cs-core",
+      "label": "CS Core",
+      "items": ["Data Structures and Algorithms", "DBMS", "Operating Systems", "OOP", "Computer Networks"]
+    }
+  ],
+  "achievements": [
+    {
+      "id": "becon-24",
+      "title": "Hackathon Finalist",
+      "text": "Advanced to the Final Round of BEcon '24 at IIT Delhi among 30+ teams.",
+      "visible": true
+    }
+  ],
+  "dsa": {
+    "show": {
+      "solved": true,
+      "byDifficulty": true,
+      "hard": true,
+      "activeDays": true,
+      "streak": true,
+      "contestRating": false,
+      "topPercent": false
+    },
+    "streakMinimum": 7
+  },
+  "recentlyShipped": { "show": true, "hideIfOlderThanDays": 30 }
+}
