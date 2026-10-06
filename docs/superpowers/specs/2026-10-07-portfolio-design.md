@@ -123,7 +123,6 @@ Site = {
     name, headline, tagline,
     status: { show: boolean, text },          // "Open to AI/ML & SDE roles · Noida / Remote"
     location, email,
-    phone: { show: boolean, value },          // default show: false (see §13)
     links: { github, linkedin, leetcode },
     photo?: "/uploads/....webp",
     resumePdf: "/resume.pdf"
@@ -165,8 +164,8 @@ Copied word for word. The only changes are the three typo fixes marked ✱, whic
 résumé too if he agrees (see §13).
 
 - **Profile:** Priyanshu Tiwari · headline "AI/ML Engineer" · email `pkt.codes@gmail.com` ·
-  GitHub `Halok600` · LeetCode `priyanshuthebest2` · LinkedIn handle **to be confirmed** (§13) ·
-  phone stored but hidden.
+  GitHub `Halok600` · LeetCode `priyanshuthebest2` · LinkedIn `priyanshu0604` ·
+  **no phone number anywhere in the data, the code or the repo** (his decision, 7 Oct).
 - **Featured projects (shown):** PolyO (GitHub + Live `polyo.vercel.app`), The Aerial Guardian
   (GitHub + Live), Enagram.io (GitHub + Live). Résumé bullets as written.
 - **More projects (shown):** WeaponShield AI, **GitHub link only** (its live site is an empty page).
@@ -387,22 +386,15 @@ not things that are secret.
 
 ---
 
-## 13. Open questions — need his answer before building
+## 13. Questions and answers
 
-1. **Repo public or private?** *Recommended: public.* The edit system is itself a portfolio piece
-   recruiters can read. Downside: hidden items are visible in `site.json` (§10). Private works too:
-   Vercel deploys private repos, and commits still count because "include private contributions" is
-   on.
-2. **Site address.** *Recommended: start on a free `*.vercel.app` name* (for example
-   `priyanshu-tiwari.vercel.app`; availability is only known when the project is created). A custom
-   domain such as `priyanshutiwari.dev` (about ₹1,000/year) can be added later without changing
-   anything else.
-3. **LinkedIn handle.** The main résumé uses `/in/priyanshu0604`; on 1 Oct the chosen handle was
-   noted as `/in/priyanshutiwari0606`. Which one is live?
-4. **Fix the three typos in the main résumé as well?** *Recommended: yes.* The site and résumé should
-   match.
-5. **Phone number on the public site?** *Recommended: no.* Public pages get scraped for spam calls.
-   It stays in the file, switched off.
+| # | Question | Answer |
+|---|---|---|
+| 1 | Repo public or private? | **Public** (default taken: not answered 7 Oct, can be flipped later). Hidden items are readable in `site.json`, see §10 |
+| 2 | Site address | Free `*.vercel.app` name first (default taken: not answered); custom domain later |
+| 3 | LinkedIn handle | **`priyanshu0604`** (his answer, 7 Oct) |
+| 4 | Fix the three typos | Fixed in the site's seed content. The résumé fix is still waiting for his OK |
+| 5 | Phone number | **None on the site.** Removed from the data model entirely, because a hidden field in a public repo would still publish it |
 
 ---
 
