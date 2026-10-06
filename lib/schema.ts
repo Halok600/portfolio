@@ -126,6 +126,7 @@ export const SiteSchema = z.strictObject({
       hard: z.boolean(),
       activeDays: z.boolean(),
       streak: z.boolean(),
+      heatmap: z.boolean(),
       contestRating: z.boolean(),
       topPercent: z.boolean(),
     }),
@@ -148,7 +149,8 @@ export const LeetcodeSchema = z.strictObject({
   medium: z.number().int().nonnegative(),
   hard: z.number().int().nonnegative(),
   activeDays: z.number().int().nonnegative(),
-  streak: z.number().int().nonnegative(),
+  // ISO date -> submissions that day (only days with at least one submission)
+  calendar: z.record(z.string().regex(/^\d{4}-\d{2}-\d{2}$/), z.number().int().positive()),
   rating: z.number().nonnegative(),
   topPercent: z.number().min(0).max(100),
   contests: z.number().int().nonnegative(),

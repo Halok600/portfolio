@@ -4,8 +4,27 @@ import { describe, expect, it } from "vitest";
 import {
   featuredProjects, formatDate, gridProjects, leetcode, site, visibleSections,
 } from "@/lib/content";
+import { buildHeatmap } from "@/lib/leetcode-calendar";
 
 const raw = (rel: string) => readFileSync(path.join(process.cwd(), rel), "utf8");
+
+describe("leetcode data", () => {
+  const hm = buildHeatmap(leetcode.calendar, leetcode.fetchedAt.slice(0, 10));
+
+  it("keeps the stored active-day count consistent with the calendar", () => {
+    expect(hm.activeDays).toBe(leetcode.activeDays);
+    expect(Object.keys(leetcode.calendar)).toHaveLength(leetcode.activeDays);
+  });
+
+  it("has every calendar day inside the heatmap window", () => {
+    const shown = hm.weeks.flat().filter((c) => c && c.count > 0).length;
+    expect(shown).toBe(leetcode.activeDays);
+  });
+
+  it("never reports more problems solved by difficulty than in total", () => {
+    expect(leetcode.easy + leetcode.medium + leetcode.hard).toBe(leetcode.solved);
+  });
+});
 
 describe("seed content", () => {
   it("loads and validates", () => {

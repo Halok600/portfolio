@@ -41,7 +41,7 @@ function minimalSite() {
     dsa: {
       show: {
         solved: true, byDifficulty: true, hard: true, activeDays: true,
-        streak: true, contestRating: false, topPercent: false,
+        streak: true, heatmap: true, contestRating: false, topPercent: false,
       },
       streakMinimum: 7,
     },
