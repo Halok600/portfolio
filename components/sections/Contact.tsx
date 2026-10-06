@@ -1,35 +1,42 @@
 import { site } from "@/lib/content";
-import { ExtLink, SectionShell } from "@/components/ui";
-
-const linkClass =
-  "rounded-lg border border-line px-5 py-2.5 text-sm font-medium transition-colors hover:border-accent";
+import { LocalTime } from "@/components/LocalTime";
+import { Reveal } from "@/components/Reveal";
+import { SectionHead } from "@/components/SectionHead";
 
 export function Contact({ title }: { title: string }) {
   const { profile } = site;
+  const city = profile.location.split(",")[0];
   return (
-    <SectionShell id="contact" title={title}>
-      <p className="max-w-xl text-lg text-muted">
-        Looking for an AI/ML or software engineer? The quickest way to reach me is email.
-      </p>
-      <p className="mt-4">
-        <a
-          href={`mailto:${profile.email}`}
-          className="font-mono text-xl text-accent underline underline-offset-4"
-        >
+    <section className="wrap contact" id="contact" aria-labelledby="contact-title">
+      <Reveal>
+        <SectionHead id="contact" title={title} note={profile.status.show ? `● ${profile.status.text}` : undefined} />
+        <a className="mail" href={`mailto:${profile.email}`}>
           {profile.email}
         </a>
-      </p>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <ExtLink href={profile.links.linkedin} className={linkClass}>
-          LinkedIn
-        </ExtLink>
-        <ExtLink href={profile.links.github} className={linkClass}>
-          GitHub
-        </ExtLink>
-        <ExtLink href={profile.links.leetcode} className={linkClass}>
-          LeetCode
-        </ExtLink>
+        <div className="btns">
+          <a className="btn solid" href={profile.resumePdf}>
+            Résumé ↓
+          </a>
+          <a className="btn" href={profile.links.github} target="_blank" rel="noopener noreferrer">
+            GitHub ↗
+          </a>
+          <a className="btn" href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
+            LinkedIn ↗
+          </a>
+          <a className="btn" href={profile.links.leetcode} target="_blank" rel="noopener noreferrer">
+            LeetCode ↗
+          </a>
+        </div>
+      </Reveal>
+      <div className="bottom mono">
+        <span>© 2026 {profile.name}</span>
+        <LocalTime city={city} />
+        <nav aria-label="Footer">
+          <a href="#featured">Work</a>
+          <a href="#dsa">Problem solving</a>
+          <a href="#contact">Contact</a>
+        </nav>
       </div>
-    </SectionShell>
+    </section>
   );
 }

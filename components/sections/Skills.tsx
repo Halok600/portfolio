@@ -1,26 +1,26 @@
 import { site } from "@/lib/content";
-import { SectionShell } from "@/components/ui";
+import { Reveal } from "@/components/Reveal";
+import { SectionHead } from "@/components/SectionHead";
 
 export function Skills({ title }: { title: string }) {
   if (site.skills.length === 0) return null;
   return (
-    <SectionShell id="skills" title={title}>
-      <dl className="space-y-5">
-        {site.skills.map((row) => (
-          <div key={row.id} className="grid gap-2 md:grid-cols-[11rem_1fr] md:gap-6">
-            <dt className="font-medium">{row.label}</dt>
-            <dd>
-              <ul className="flex flex-wrap gap-2">
+    <section className="wrap" id="skills" aria-labelledby="skills-title">
+      <Reveal>
+        <SectionHead id="skills" title={title} />
+        <dl>
+          {site.skills.map((row) => (
+            <div key={row.id} className="sk">
+              <dt className="mono">{row.label}</dt>
+              <dd>
                 {row.items.map((item) => (
-                  <li key={item} className="rounded-md border border-line px-2.5 py-1 text-sm text-muted">
-                    {item}
-                  </li>
+                  <span key={item}>{item}</span>
                 ))}
-              </ul>
-            </dd>
-          </div>
-        ))}
-      </dl>
-    </SectionShell>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </Reveal>
+    </section>
   );
 }
