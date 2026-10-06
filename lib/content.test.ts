@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -65,6 +65,24 @@ describe("seed content", () => {
 
   it("does not show contest rating by default", () => {
     expect(site.dsa.show.contestRating).toBe(false);
+  });
+  it("gives every visible project a kind", () => {
+    for (const p of site.projects.filter((x) => x.visible)) {
+      expect(p.kind, p.title).toBeTruthy();
+    }
+  });
+
+  it("only references figure images that exist on disk", () => {
+    for (const p of site.projects) {
+      if (p.image) {
+        expect(existsSync(path.join(process.cwd(), "public", p.image)), p.image).toBe(true);
+      }
+    }
+  });
+
+  it("uses the signal accent and a role title", () => {
+    expect(site.settings.accent).toBe("signal");
+    expect(site.profile.role).toBe("AI/ML Engineer");
   });
 });
 
