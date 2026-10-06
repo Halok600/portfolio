@@ -47,7 +47,8 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
       px += (mx - px) * 0.16;
       py += (my - py) * 0.16;
       const x = Math.min(px + 40, window.innerWidth - 380);
-      const y = Math.max(py - 262, 66);
+      const above = py - 282;
+      const y = above >= 66 ? above : py + 56;
       peek.style.transform = `translate(${x}px,${y}px) rotate(${((mx - px) * 0.02).toFixed(2)}deg)`;
       raf = active ? requestAnimationFrame(loop) : 0;
     };
@@ -97,7 +98,7 @@ export function WorkIndex({ items }: { items: WorkItem[] }) {
         const host = it.links.live ? it.links.live.replace(/^https?:\/\//, "").replace(/\/$/, "") : it.title;
         return (
           <article key={it.id} className="item">
-            <div className="row" data-row data-img={it.image} data-cap={host}>
+            <div className={`row${isOpen ? " sel" : ""}`} data-row data-img={it.image} data-cap={host}>
               <span className="idx mono">{num}</span>
               <h3 className="ttl">
                 <button
