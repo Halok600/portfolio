@@ -8,16 +8,18 @@ import { Dsa } from "@/components/sections/Dsa";
 import { Education } from "@/components/sections/Education";
 import { Experience } from "@/components/sections/Experience";
 import { Hero } from "@/components/sections/Hero";
+import { Shipped } from "@/components/sections/Shipped";
 import { Skills } from "@/components/sections/Skills";
 import { Work } from "@/components/sections/Work";
 
 type Render = (title: string) => ReactNode;
 
-// Sections not listed here (tryPolyo, until Phase 2) are skipped.
+// Sections not listed here are skipped.
 const registry: Partial<Record<SectionId, Render>> = {
   hero: () => <Hero />,
   featured: (t) => <Work title={t} />,
   projects: (t) => <AlsoBuilt title={t} />,
+  shipped: (t) => <Shipped title={t} />,
   experience: (t) => <Experience title={t} />,
   dsa: (t) => <Dsa title={t} />,
   skills: (t) => <Skills title={t} />,
