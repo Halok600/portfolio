@@ -2,10 +2,14 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <main className="mx-auto max-w-4xl px-4 py-32 text-center sm:px-6">
-      <p className="font-mono text-sm text-muted">404</p>
-      <h1 className="mt-2 text-3xl font-semibold">That page doesn&apos;t exist.</h1>
-      <Link href="/" className="mt-6 inline-block text-accent underline underline-offset-4">
+    <main id="main" className="wrap" style={{ paddingTop: "clamp(80px, 14vw, 200px)", paddingBottom: "120px" }}>
+      <p className="mono" style={{ color: "var(--mut)" }}>
+        404
+      </p>
+      <h1 style={{ fontSize: "clamp(44px, 9vw, 150px)", fontWeight: 600, letterSpacing: "-.05em", lineHeight: 0.95, margin: "18px 0 36px" }}>
+        That page doesn&apos;t exist.
+      </h1>
+      <Link className="btn solid" href="/">
         Back to the portfolio
       </Link>
     </main>
