@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Priyanshu Tiwari — AI/ML Engineer (PROTOTYPE)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  try { var t = localStorage.getItem("proto-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<style>
+  :root, [data-theme="dark"] {
+    --bg: #0b0b0a; --fg: #ece7da; --mut: #8d8a80; --line: rgba(236,231,218,.14);
+    --acc: #d4ff3a; --on-acc: #0b0b0a; --grain: .07;
+    color-scheme: dark;
+  }
+  [data-theme="light"] {
+    --bg: #ece7db; --fg: #131211; --mut: #67645c; --line: rgba(19,18,17,.18);
+    --acc: #ff4b1f; --on-acc: #131211; --grain: .13;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--fg);
+    font-family: "Bricolage Grotesque", system-ui, sans-serif;
+    font-optical-sizing: auto; cursor: crosshair; overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    transition: background .35s, color .35s;
+  }
+  a { color: inherit; text-decoration: none; cursor: crosshair; }
+  ::selection { background: var(--acc); color: var(--on-acc); }
+  .mono { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 12px; letter-spacing: .02em; }
+  .serif { font-family: "Instrument Serif", Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; }
+
+  /* paper / film grain */
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: var(--grain);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  .wrap { padding: 0 clamp(18px, 3.6vw, 56px); max-width: 1680px; margin: 0 auto; }
+
+  /* ---------- header ---------- */
+  header.top {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .top .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 54px; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand .dot { width: 8px; height: 8px; background: var(--acc); border-radius: 50%; box-shadow: 0 0 0 4px color-mix(in srgb, var(--acc) 22%, transparent); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--acc) 0%, transparent); } }
+  .ruler { display: flex; align-items: flex-end; gap: 5px; height: 22px; }
+  .ruler i { display: block; width: 1px; height: 8px; background: var(--mut); opacity: .55; transition: height .2s, background .2s, opacity .2s; }
+  .ruler i:nth-child(4n+1) { height: 14px; }
+  .ruler i.on { background: var(--acc); opacity: 1; }
+  .ruler i.cur { height: 22px; background: var(--acc); opacity: 1; }
+  .actions { display: flex; justify-content: flex-end; align-items: center; gap: 18px; }
+  .actions button, .actions a { font: inherit; color: inherit; background: none; border: 0; cursor: crosshair; }
+  .actions .time { color: var(--mut); }
+  .actions .cta { border: 1px solid var(--fg); padding: 6px 12px; border-radius: 99px; transition: background .2s, color .2s, border-color .2s; }
+  .actions .cta:hover { background: var(--acc); color: var(--on-acc); border-color: var(--acc); }
+  .actions .tgl:hover { color: var(--acc); }
+
+  /* ---------- hero ---------- */
+  .hero { padding-top: clamp(28px, 6vw, 84px); padding-bottom: clamp(40px, 6vw, 90px); }
+  .eyebrow { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--mut); margin-bottom: clamp(56px, 5.4vw, 88px); }
+  .h1wrap { position: relative; display: inline-block; padding-right: .1em; }
+  h1 {
+    font-weight: 600; font-size: clamp(72px, 15.6vw, 300px); line-height: .84; letter-spacing: -.055em;
+    font-variation-settings: "opsz" 96;
+  }
+  h1 .line { display: block; overflow: hidden; padding: .06em .12em .1em 0; margin: -.06em 0 -.1em; }
+  h1 .line > span { display: block; transform: translateY(108%); animation: up 1s cubic-bezier(.2,.8,.2,1) forwards; }
+  h1 .line:nth-child(2) > span { animation-delay: .12s; }
+  h1 .serif { font-size: 1.02em; letter-spacing: -.035em; }
+  @keyframes up { to { transform: none; } }
+
+  /* the signature: a detection box */
+  .box { position: absolute; inset: 0; pointer-events: none; }
+  .box b { position: absolute; width: 16px; height: 16px; border: 0 solid var(--acc); }
+  .box b:nth-of-type(1) { left: 0; top: 0; border-width: 2px 0 0 2px; }
+  .box b:nth-of-type(2) { right: 0; top: 0; border-width: 2px 2px 0 0; }
+  .box b:nth-of-type(3) { left: 0; bottom: 0; border-width: 0 0 2px 2px; }
+  .box b:nth-of-type(4) { right: 0; bottom: 0; border-width: 0 2px 2px 0; }
+  .box::before { content: ""; position: absolute; inset: 0; border: 1px solid color-mix(in srgb, var(--acc) 38%, transparent); }
+  .box .lab {
+    position: absolute; left: -1px; top: 0; transform: translateY(-100%);
+    background: var(--acc); color: var(--on-acc); padding: 3px 8px; white-space: nowrap;
+    font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 500; letter-spacing: .02em;
+  }
+  .hero .box { inset: -1.6vw -1.6vw -.2vw -1.6vw; opacity: 0; transform: scale(1.03); animation: lock .8s cubic-bezier(.2,.8,.2,1) 1.25s forwards; }
+  @keyframes lock { to { opacity: 1; transform: none; } }
+
+  .lead { display: grid; grid-template-columns: 1.25fr 1fr; gap: clamp(24px, 6vw, 120px); margin-top: clamp(40px, 6vw, 92px); align-items: end; }
+  .lead p.big { font-size: clamp(24px, 2.9vw, 46px); line-height: 1.08; letter-spacing: -.028em; font-weight: 400; max-width: 22ch; }
+  .lead p.big em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; font-size: 1.08em; }
+  .lead .side { display: grid; gap: 22px; justify-items: start; }
+  .lead .side p { color: var(--mut); max-width: 44ch; font-size: 15.5px; line-height: 1.5; }
+  .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 13px 20px; border-radius: 99px; border: 1px solid var(--fg); font-weight: 500; font-size: 15px; transition: transform .25s cubic-bezier(.2,.8,.2,1), background .2s, color .2s, border-color .2s; }
+  .btn.solid { background: var(--acc); color: var(--on-acc); border-color: var(--acc); }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:not(.solid):hover { background: var(--fg); color: var(--bg); }
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: clamp(40px, 5vw, 70px); border-top: 1px solid var(--line); }
+  .facts div { padding: 16px 0 0; display: grid; gap: 4px; }
+  .facts div + div { padding-left: clamp(12px, 2vw, 28px); border-left: 1px solid var(--line); }
+  .facts b { font-weight: 500; font-size: clamp(18px, 1.8vw, 26px); letter-spacing: -.02em; }
+  .facts span { color: var(--mut); }
+
+  /* ---------- section heads ---------- */
+  section { padding-top: clamp(60px, 9vw, 140px); }
+  .sh { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: var(--mut); }
+  .sh h2 { font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--fg); }
+
+  /* ---------- work index ---------- */
+  .index { margin-top: 0; }
+  .row {
+    position: relative; display: grid; align-items: baseline;
+    grid-template-columns: 56px minmax(0, 1fr) minmax(170px, 270px) 40px;
+    column-gap: 18px; padding: clamp(18px, 2.4vw, 34px) 0; border-bottom: 1px solid var(--line);
+    transition: opacity .3s, padding .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .row .idx { color: var(--mut); }
+  .row .ttl { font-size: clamp(38px, 6.2vw, 108px); font-weight: 500; letter-spacing: -.045em; line-height: .92; font-variation-settings: "opsz" 96; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+  .row .meta { display: grid; gap: 5px; color: var(--mut); }
+  .row .arr { text-align: right; font-size: 22px; transition: transform .3s; }
+  .row .sum { grid-column: 2 / 4; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.2,.8,.2,1); }
+  .row .sum > p { overflow: hidden; color: var(--mut); font-size: 17px; line-height: 1.45; max-width: 60ch; }
+  .row .box { inset: 8px -14px 8px -14px; opacity: 0; transform: scale(1.012); transition: opacity .25s, transform .4s cubic-bezier(.2,.8,.2,1); }
+  .index:hover .row { opacity: .32; }
+  .index .row:hover, .index .row:focus-visible { opacity: 1; outline: none; }
+  .row:hover .box, .row:focus-visible .box { opacity: 1; transform: none; }
+  .row:hover .ttl, .row:focus-visible .ttl { transform: translateX(14px); }
+  .row:hover .arr, .row:focus-visible .arr { transform: translate(4px, -4px); color: var(--acc); }
+  .row:hover .sum, .row:focus-visible .sum { grid-template-rows: 1fr; }
+  .row:hover .sum > p, .row:focus-visible .sum > p { padding-top: 14px; }
+  .more { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; border-bottom: 1px solid var(--line); color: var(--mut); transition: color .2s; }
+  .more:hover { color: var(--acc); }
+
+  /* cursor-following figure */
+  .peek { position: fixed; left: 0; top: 0; z-index: 70; width: 360px; aspect-ratio: 16/10; pointer-events: none; opacity: 0; border: 1px solid var(--line); background: #000; overflow: hidden; transition: opacity .2s; will-change: transform; }
+  .peek.show { opacity: 1; }
+  .peek img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .peek .cap { position: absolute; left: 0; bottom: 0; background: var(--acc); color: var(--on-acc); padding: 3px 8px; font-family: "JetBrains Mono", monospace; font-size: 10.5px; font-weight: 500; }
+
+  /* ---------- problem solving ---------- */
+  .ps { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(24px, 6vw, 110px); padding-top: clamp(24px, 4vw, 60px); align-items: end; }
+  .ps .num { font-size: clamp(130px, 27vw, 470px); font-weight: 600; line-height: .78; letter-spacing: -.07em; font-variation-settings: "opsz" 96; font-variant-numeric: tabular-nums; }
+  .ps .num sup { font-size: .16em; letter-spacing: 0; vertical-align: top; position: relative; top: .6em; margin-left: .25em; color: var(--mut); font-family: "JetBrains Mono", monospace; font-weight: 400; }
+  .ps .col { display: grid; gap: 26px; padding-bottom: 6px; }
+  .hard { display: flex; align-items: baseline; gap: 12px; }
+  .hard b { font-size: clamp(54px, 7vw, 110px); font-weight: 600; letter-spacing: -.05em; line-height: .9; color: var(--acc); }
+  .bar { display: flex; height: 8px; gap: 3px; }
+  .bar i { display: block; background: var(--fg); }
+  .bar i:nth-child(1) { opacity: .28; } .bar i:nth-child(2) { opacity: .55; } .bar i:nth-child(3) { background: var(--acc); }
+  .legend { display: flex; justify-content: space-between; color: var(--mut); margin-top: 10px; }
+  .foot-note { color: var(--mut); margin-top: 18px; }
+
+  /* ---------- contact ---------- */
+  .contact { padding-bottom: 28px; }
+  .contact .mail { display: inline-block; font-size: clamp(34px, 8.4vw, 150px); font-weight: 500; letter-spacing: -.05em; line-height: 1; margin: clamp(18px, 3vw, 40px) 0; position: relative; word-break: break-all; }
+  .contact .mail::after { content: ""; position: absolute; left: 0; right: 0; bottom: -.04em; height: .06em; background: var(--acc); transform: scaleX(0); transform-origin: left; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+  .contact .mail:hover::after { transform: scaleX(1); }
+  .bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; color: var(--mut); border-top: 1px solid var(--line); padding: 18px 0 26px; margin-top: clamp(50px, 7vw, 100px); }
+  .bottom a:hover { color: var(--acc); }
+  .bottom nav { display: flex; gap: 22px; }
+
+  /* reveal on scroll */
+  .rv { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1); }
+  .rv.in { opacity: 1; transform: none; }
+
+  /* ---------- mobile ---------- */
+  @media (max-width: 820px) {
+    .top .wrap { grid-template-columns: 1fr auto; }
+    .ruler, .actions .time { display: none; }
+    .lead, .ps { grid-template-columns: 1fr; }
+    .facts b { font-size: 17px; }
+    .row { grid-template-columns: 34px minmax(0, 1fr) 28px; row-gap: 6px; }
+    .row .meta { grid-column: 2; order: 3; }
+    .row .arr { grid-column: 3; grid-row: 1; }
+    .row .sum { grid-column: 2; grid-template-rows: 1fr; order: 5; }
+    .row .sum > p { padding-top: 6px; font-size: 15px; }
+    .index:hover .row { opacity: 1; }
+    .box { display: none; }
+    .hero .box { display: block; }
+    .peek { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    h1 .line > span, .hero .box, .rv { transform: none !important; opacity: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand mono"><span class="dot"></span><span>Priyanshu Tiwari</span></div>
+    <div class="ruler" id="ruler" aria-hidden="true"></div>
+    <div class="actions mono">
+      <span class="time" id="clock">Noida --:-- IST</span>
+      <button class="tgl" id="tgl" type="button" aria-label="Toggle theme">◐ <span id="tglLabel">Light</span></button>
+      <a class="cta" href="#">Résumé ↓</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div class="eyebrow mono"><span>● Open to AI/ML and SDE roles</span><span>Noida, India — graduated Sept 2026</span></div>
+
+    <div class="h1wrap">
+      <h1>
+        <span class="line"><span>Priyanshu</span></span>
+        <span class="line"><span class="serif">Tiwari</span></span>
+      </h1>
+      <div class="box" aria-hidden="true"><b></b><b></b><b></b><b></b><span class="lab">engineer · id 01</span></div>
+    </div>
+
+    <div class="lead">
+      <p class="big">AI/ML engineer building systems that <em>see</em>, <em>read code</em> and <em>ship</em>.</p>
+      <div class="side">
+        <p>I train the model, then build the service around it: a drone tracker that runs in your browser, a static analyser that predicts Big-O, an agent over your inbox.</p>
+        <div class="btns">
+          <a class="btn solid" href="#">Résumé ↓</a>
+          <a class="btn" href="mailto:pkt.codes@gmail.com">Say hello ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="facts mono">
+      <div><b>603 solved</b><span>LeetCode · 70 Hard</span></div>
+      <div><b>3 live demos</b><span>PolyO · Aerial Guardian · Enagram</span></div>
+      <div><b>B.Tech CSE</b><span>JIIT Noida · 2026</span></div>
+    </div>
+  </div>
+
+  <section class="wrap" id="work">
+    <div class="sh rv"><h2>Selected work</h2><span class="mono">hover to lock on</span></div>
+    <div class="index rv" id="index">
+      <a class="row" href="https://polyo.vercel.app" target="_blank" rel="noopener" data-img="img/polyo.jpg" data-cap="polyo.vercel.app">
+        <span class="idx mono">01</span>
+        <span class="ttl">PolyO</span>
+        <span class="meta mono"><span>Developer tool · ML</span><span>tree-sitter · GNN · FastAPI</span></span>
+        <span class="arr">↗</span>
+        <span class="sum"><p>Predicts the worst-case time and space complexity of source code in six languages. No code execution, no LLM calls.</p></span>
+        <span class="box" aria-hidden="true"><b></b><b></b><b></b><b></b><span class="lab">id 01 · locked</span></span>
+      </a>
+      <a class="row" href="https://halok600.github.io/The-Aerial-Guardian/" target="_blank" rel="noopener" data-img="img/aerial.jpg" data-cap="the-aerial-guardian">
+        <span class="idx mono">02</span>
+        <span class="ttl">The Aerial Guardian</span>
+        <span class="meta mono"><span>Computer vision</span><span>YOLOv8 · ByteTrack · ONNX Web</span></span>
+        <span class="arr">↗</span>
+        <span class="sum"><p>Real-time multi-object tracking for drone footage, running entirely in the browser. The video never leaves your device.</p></span>
+        <span class="box" aria-hidden="true"><b></b><b></b><b></b><b></b><span class="lab">id 02 · locked</span></span>
+      </a>
+      <a class="row" href="https://enagram-io.vercel.app" target="_blank" rel="noopener" data-img="img/enagram.jpg" data-cap="enagram-io.vercel.app">
+        <span class="idx mono">03</span>
+        <span class="ttl">Enagram.io</span>
+        <span class="meta mono"><span>AI agent</span><span>pgvector · RAG · OAuth</span></span>
+        <span class="arr">↗</span>
+        <span class="sum"><p>One question across your Gmail, Drive and Calendar, answered in a single reply, with tool-calling behind Google OAuth.</p></span>
+        <span class="box" aria-hidden="true"><b></b><b></b><b></b><b></b><span class="lab">id 03 · locked</span></span>
+      </a>
+      <a class="more mono" href="#"><span>+ WeaponShield AI, MedFusionAI, drone-tilt-detection, Leehint, reddit-insights</span><span>All projects →</span></a>
+    </div>
+  </section>
+
+  <section class="wrap" id="solving">
+    <div class="sh rv"><h2>Problem solving</h2><span class="mono">live from LeetCode</span></div>
+    <div class="ps rv">
+      <div class="num">603<sup>solved</sup></div>
+      <div class="col">
+        <div class="hard"><b>70</b><span class="mono">of them Hard</span></div>
+        <div>
+          <div class="bar"><i style="flex:216"></i><i style="flex:317"></i><i style="flex:70"></i></div>
+          <div class="legend mono"><span>Easy 216</span><span>Medium 317</span><span style="color:var(--acc)">Hard 70</span></div>
+        </div>
+        <div class="mono foot-note">164 active days · updated 6 Oct 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap contact" id="contact">
+    <div class="sh rv"><h2>Contact</h2><span class="mono">● Open to AI/ML and SDE roles</span></div>
+    <div class="rv">
+      <a class="mail" href="mailto:pkt.codes@gmail.com">pkt.codes@gmail.com</a>
+      <div class="btns">
+        <a class="btn solid" href="#">Résumé ↓</a>
+        <a class="btn" href="https://github.com/Halok600" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="btn" href="https://www.linkedin.com/in/priyanshu0604" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+    <div class="bottom mono">
+      <span>© 2026 Priyanshu Tiwari</span>
+      <span id="clock2">Noida --:-- IST</span>
+      <nav><a href="#work">Work</a><a href="#solving">Problem solving</a><a href="#contact">Contact</a></nav>
+    </div>
+  </section>
+</main>
+
+<div class="peek" id="peek" aria-hidden="true"><img alt="" src=""><span class="cap" id="peekCap"></span></div>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+
+  // ---- theme
+  var tgl = $("#tgl"), tglLabel = $("#tglLabel");
+  function syncLabel() { tglLabel.textContent = document.documentElement.dataset.theme === "dark" ? "Light" : "Dark"; }
+  syncLabel();
+  tgl.addEventListener("click", function () {
+    var next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("proto-theme", next); } catch (e) {}
+    syncLabel();
+  });
+
+  // ---- local time (Noida)
+  function tick() {
+    var t = new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", hour12: false }).format(new Date());
+    $("#clock").textContent = "Noida " + t + " IST";
+    $("#clock2").textContent = "Noida " + t + " IST";
+  }
+  tick(); setInterval(tick, 20000);
+
+  // ---- scroll ruler
+  var ruler = $("#ruler"), N = 28, ticks = [];
+  for (var i = 0; i < N; i++) { var el = document.createElement("i"); ruler.appendChild(el); ticks.push(el); }
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - innerHeight;
+    var p = max > 0 ? scrollY / max : 0, cur = Math.min(N - 1, Math.round(p * (N - 1)));
+    for (var i = 0; i < N; i++) { ticks[i].className = i < cur ? "on" : i === cur ? "cur" : ""; }
+  }
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  // ---- reveal on scroll
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
+
+  // ---- cursor-following figure
+  var fine = matchMedia("(hover:hover) and (pointer:fine)").matches;
+  if (!fine) return;
+  var peek = $("#peek"), img = peek.querySelector("img"), cap = $("#peekCap");
+  var mx = 0, my = 0, px = 0, py = 0, raf = null, active = false;
+  function loop() {
+    px += (mx - px) * .16; py += (my - py) * .16;
+    var rot = (mx - px) * .02;
+    var x = Math.min(px + 40, innerWidth - 380), y = Math.max(py - 262, 66);
+    peek.style.transform = "translate(" + x + "px," + y + "px) rotate(" + rot.toFixed(2) + "deg)";
+    raf = active ? requestAnimationFrame(loop) : null;
+  }
+  addEventListener("mousemove", function (e) { mx = e.clientX; my = e.clientY; if (!active) { px = mx; py = my; } });
+  document.querySelectorAll(".row").forEach(function (row) {
+    row.addEventListener("mouseenter", function () {
+      img.src = row.dataset.img; cap.textContent = row.dataset.cap;
+      active = true; peek.classList.add("show"); if (!raf) loop();
+    });
+    row.addEventListener("mouseleave", function () { active = false; peek.classList.remove("show"); });
+  });
+})();
+</script>
+</body>
+</html>
