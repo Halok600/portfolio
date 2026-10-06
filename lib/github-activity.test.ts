@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  allowedRepos, firstLine, groupPushes, isFresh, isNoise, relativeTime, repoFromUrl,
+  allowedRepos, firstLine, isFresh, isNoise, pickCommit, relativeTime, repoFromUrl,
 } from "@/lib/github-activity";
 import { site } from "@/lib/content";
 
@@ -29,33 +29,29 @@ describe("allowedRepos", () => {
   });
 });
 
-describe("groupPushes", () => {
-  const ev = (repo: string, at: string, head = "abc1234") => ({
-    type: "PushEvent", repo: { name: repo }, created_at: at, payload: { head },
-  });
-  const allowed = new Set(["halok600/polyo", "halok600/portfolio"]);
-  const events = [
-    ev("Halok600/polyo", "2026-10-03T00:00:00Z", "old"),
-    ev("Halok600/portfolio", "2026-10-06T00:00:00Z", "p1"),
-    ev("Halok600/polyo", "2026-10-05T00:00:00Z", "new"),
-    ev("Halok600/secret-repo", "2026-10-07T00:00:00Z", "x"),
-    { type: "WatchEvent", repo: { name: "Halok600/polyo" }, created_at: "2026-10-07T00:00:00Z", payload: {} },
-  ];
-
-  it("groups allowed pushes by repo, newest repo first and newest push first", () => {
-    const groups = groupPushes(events, allowed, { perRepo: 3, maxRepos: 6 });
-    expect(groups.map((g) => g.repo)).toEqual(["Halok600/portfolio", "Halok600/polyo"]);
-    expect(groups[1].pushes.map((p) => p.head)).toEqual(["new", "old"]);
+describe("pickCommit", () => {
+  const c = (message: string, date: string, sha = "abc1234") => ({
+    sha,
+    html_url: `https://github.com/Halok600/x/commit/${sha}`,
+    commit: { message, committer: { date } },
   });
 
-  it("ignores other event types and repos that are not on the site", () => {
-    const flat = groupPushes(events, allowed, { perRepo: 3, maxRepos: 6 }).flatMap((g) => g.pushes.map((p) => p.head));
-    expect(flat).not.toContain("x");
+  it("returns the newest commit that is real work (the API lists newest first)", () => {
+    const picked = pickCommit([
+      c("chore: refresh LeetCode data", "2026-10-07T00:00:00Z"),
+      c("feat: add GNN rung\n\nlong body", "2026-10-05T00:00:00Z", "feat111"),
+      c("fix: older", "2026-10-01T00:00:00Z", "fix2222"),
+    ]);
+    expect(picked).toEqual({
+      message: "feat: add GNN rung",
+      url: "https://github.com/Halok600/x/commit/feat111",
+      at: "2026-10-05T00:00:00Z",
+    });
   });
 
-  it("limits pushes per repo and the number of repos", () => {
-    expect(groupPushes(events, allowed, { perRepo: 1, maxRepos: 6 })[1].pushes).toHaveLength(1);
-    expect(groupPushes(events, allowed, { perRepo: 3, maxRepos: 1 })).toHaveLength(1);
+  it("returns null when every commit is housekeeping or the list is empty", () => {
+    expect(pickCommit([c("Add MIT license", "2026-10-01T00:00:00Z"), c("docs: x", "2026-09-01T00:00:00Z")])).toBeNull();
+    expect(pickCommit([])).toBeNull();
   });
 });
 

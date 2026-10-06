@@ -2,8 +2,9 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
-  EXAMPLES, LANGUAGES, MAX_CODE, RequestSchema, ResultSchema, engineLabel, formatBigO,
+  EXAMPLES, LANGUAGES, MAX_CODE, engineLabel, formatBigO, looksLikeResult, trimSaturation,
 } from "@/lib/polyo";
+import { RequestSchema, ResultSchema } from "@/lib/polyo-schema";
 
 describe("formatBigO", () => {
   it("writes exponents as superscripts", () => {
@@ -15,6 +16,31 @@ describe("formatBigO", () => {
     expect(formatBigO("O(n * m)")).toBe("O(n·m)");
     expect(formatBigO("O(n log n)")).toBe("O(n log n)");
     expect(formatBigO("O(1)")).toBe("O(1)");
+  });
+});
+
+describe("trimSaturation", () => {
+  it("stops a series where PolyO's numbers overflow and flat-line", () => {
+    const capped = [256, 2.62e5, 2.2e12, 1.84e19, 1.84e19, 1.84e19, 1.84e19];
+    expect(trimSaturation(capped)).toEqual([256, 2.62e5, 2.2e12, 1.84e19]);
+  });
+  it("leaves a genuinely constant series alone", () => {
+    expect(trimSaturation([1, 1, 1, 1, 1])).toEqual([1, 1, 1, 1, 1]);
+  });
+  it("leaves ordinary growth alone", () => {
+    expect(trimSaturation([8, 18, 41, 93])).toEqual([8, 18, 41, 93]);
+  });
+});
+
+describe("looksLikeResult", () => {
+  it("accepts a real answer and the bundled sample", () => {
+    const sample = JSON.parse(readFileSync(path.join(process.cwd(), "lib/polyo-sample.json"), "utf8"));
+    expect(looksLikeResult(sample)).toBe(true);
+  });
+  it("rejects anything else", () => {
+    for (const bad of [null, "x", 3, {}, { time: {}, space: {} }, { time: { class: "O(1)" }, space: { class: "O(1)" } }]) {
+      expect(looksLikeResult(bad)).toBe(false);
+    }
   });
 });
 

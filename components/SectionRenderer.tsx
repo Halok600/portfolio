@@ -10,6 +10,7 @@ import { Experience } from "@/components/sections/Experience";
 import { Hero } from "@/components/sections/Hero";
 import { Shipped } from "@/components/sections/Shipped";
 import { Skills } from "@/components/sections/Skills";
+import { TryPolyo } from "@/components/sections/TryPolyo";
 import { Work } from "@/components/sections/Work";
 
 type Render = (title: string) => ReactNode;
@@ -17,6 +18,7 @@ type Render = (title: string) => ReactNode;
 // Sections not listed here are skipped.
 const registry: Partial<Record<SectionId, Render>> = {
   hero: () => <Hero />,
+  tryPolyo: (t) => <TryPolyo title={t} />,
   featured: (t) => <Work title={t} />,
   projects: (t) => <AlsoBuilt title={t} />,
   shipped: (t) => <Shipped title={t} />,

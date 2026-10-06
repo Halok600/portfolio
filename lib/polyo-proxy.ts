@@ -1,5 +1,5 @@
 import { createLimiter, type Limiter } from "@/lib/rate-limit";
-import { RequestSchema, ResultSchema } from "@/lib/polyo";
+import { RequestSchema, ResultSchema } from "@/lib/polyo-schema";
 
 export type Deps = {
   fetch: typeof fetch;

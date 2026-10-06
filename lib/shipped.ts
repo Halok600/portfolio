@@ -1,8 +1,6 @@
 import { cacheLife } from "next/cache";
 import { site } from "@/lib/content";
-import {
-  allowedRepos, firstLine, groupPushes, isNoise, repoFromUrl, type PushEvent, type Shipped,
-} from "@/lib/github-activity";
+import { allowedRepos, pickCommit, type ApiCommit, type Shipped } from "@/lib/github-activity";
 
 const API = "https://api.github.com";
 
@@ -18,34 +16,24 @@ function headers(): HeadersInit {
 }
 
 /**
- * The latest meaningful push to each project repo, newest first (at most four).
+ * The latest real-work commit in each project repo, newest first (at most four).
  * Cached for about an hour. Any failure returns [] so a GitHub outage can never break a build or a page.
+ * (One request per repo, at most 8 repos, well inside GitHub's anonymous limit of 60 an hour.)
  */
 export async function getShipped(): Promise<Shipped[]> {
   "use cache";
   cacheLife("hours");
 
   try {
-    const owner = repoFromUrl(`${site.profile.links.github}/x`)?.split("/")[0];
-    if (!owner) return [];
-
-    const res = await fetch(`${API}/users/${owner}/events/public?per_page=100`, { headers: headers() });
-    if (!res.ok) return [];
-    const events = (await res.json()) as PushEvent[];
-
-    // The events feed has no commit messages any more, so look commits up. Per repo, walk its
-    // recent pushes (newest first) until one is real work. At most 6 repos x 3 pushes = 18 calls.
-    const groups = groupPushes(events, allowedRepos(site), { perRepo: 3, maxRepos: 6 });
+    const repos = [...allowedRepos(site)].slice(0, 8);
     const found = await Promise.all(
-      groups.map(async (g): Promise<Shipped | null> => {
-        for (const p of g.pushes) {
-          const r = await fetch(`${API}/repos/${g.repo}/commits/${p.head}`, { headers: headers() });
-          if (!r.ok) continue;
-          const c = (await r.json()) as { html_url: string; commit: { message: string } };
-          const message = firstLine(c.commit.message);
-          if (!isNoise(message)) return { repo: g.repo.split("/")[1], message, url: c.html_url, at: p.at };
-        }
-        return null;
+      repos.map(async (repo): Promise<Shipped | null> => {
+        const res = await fetch(`${API}/repos/${repo}/commits?per_page=10`, { headers: headers() });
+        if (!res.ok) return null;
+        const picked = pickCommit((await res.json()) as ApiCommit[]);
+        // report the repo's real casing from the commit URL (github.com/Owner/Name/commit/sha)
+        const name = picked ? picked.url.split("/")[4] : repo.split("/")[1];
+        return picked ? { repo: name, ...picked } : null;
       }),
     );
     return found

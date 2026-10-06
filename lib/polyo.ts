@@ -1,4 +1,8 @@
-import { z } from "zod";
+// Browser-safe PolyO helpers: no runtime dependencies. The strict Zod schemas live in
+// lib/polyo-schema.ts and are only used on the server.
+import type { PolyoResult } from "@/lib/polyo-schema";
+
+export type { PolyoResult };
 
 export const MAX_CODE = 5000;
 
@@ -12,34 +16,18 @@ export const LANGUAGES = [
 ] as const;
 
 export type LanguageId = (typeof LANGUAGES)[number]["id"];
-const LANGUAGE_IDS = LANGUAGES.map((l) => l.id) as [LanguageId, ...LanguageId[]];
 
-export const RequestSchema = z.object({
-  code: z.string().min(1).max(MAX_CODE),
-  language: z.enum(LANGUAGE_IDS),
-});
-
-// Only the fields the page shows. Everything else PolyO returns is dropped on purpose.
-const Part = z.object({
-  class: z.string(),
-  expression: z.string().optional(),
-  confidence: z.number().optional(),
-  engine: z.string().optional(),
-  certainty: z.string().optional(),
-  abstain: z.boolean().optional(),
-});
-const Curve = z.object({ predicted_class: z.string(), series: z.record(z.string(), z.array(z.number())) });
-
-export const ResultSchema = z.object({
-  language_detected: z.string(),
-  time: Part,
-  space: Part,
-  engine: z.string(),
-  derivation: z.array(z.object({ line: z.number(), kind: z.string(), text: z.string() })),
-  curve: z.object({ n: z.array(z.number()), time: Curve, space: Curve }).optional(),
-});
-
-export type PolyoResult = z.infer<typeof ResultSchema>;
+/**
+ * A cheap sanity check for the browser. Our own proxy has already validated the answer with
+ * the strict schema, so this only guards against a broken deployment.
+ */
+export function looksLikeResult(x: unknown): x is PolyoResult {
+  if (typeof x !== "object" || x === null) return false;
+  const r = x as Record<string, unknown>;
+  const cls = (p: unknown) =>
+    typeof p === "object" && p !== null && typeof (p as Record<string, unknown>).class === "string";
+  return cls(r.time) && cls(r.space) && typeof r.engine === "string" && Array.isArray(r.derivation);
+}
 
 /** "O(n^2)" -> "O(n²)", "O(n * m)" -> "O(n·m)". */
 export function formatBigO(s: string): string {
@@ -48,6 +36,20 @@ export function formatBigO(s: string): string {
     .replace(/\^3/g, "³")
     .replace(/\^n/g, "ⁿ")
     .replace(/\s\*\s/g, "·");
+}
+
+/**
+ * PolyO's numbers overflow at 2^64 and then repeat. Drawing that plateau would suggest the
+ * growth stops, so keep the series only up to the first overflowed point. A genuinely
+ * constant series (like O(1)) never reaches that size, so it is left alone.
+ */
+export function trimSaturation(values: number[]): number[] {
+  for (let i = 0; i + 2 < values.length; i++) {
+    if (values[i] >= 2 ** 53 && values[i] === values[i + 1] && values[i + 1] === values[i + 2]) {
+      return values.slice(0, i + 1);
+    }
+  }
+  return values;
 }
 
 /** Be honest about which part of PolyO produced the answer. */

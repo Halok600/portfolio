@@ -3,11 +3,11 @@ import type { Site } from "@/lib/schema";
 
 export type Shipped = { repo: string; message: string; url: string; at: string };
 
-export type PushEvent = {
-  type: string;
-  repo: { name: string };
-  created_at: string;
-  payload: { head?: string };
+/** The part of GitHub's "list commits" response we read. */
+export type ApiCommit = {
+  sha: string;
+  html_url: string;
+  commit: { message: string; committer: { date: string } };
 };
 
 const DAY = 86_400_000;
@@ -37,34 +37,6 @@ export function allowedRepos(site: Site): Set<string> {
   return set;
 }
 
-export type PushGroup = { repo: string; pushes: { head: string; at: string }[] };
-
-/**
- * Allowed pushes grouped by repo. Repos are ordered by their newest push, and each repo keeps
- * its newest few pushes (newest first), so a noisy latest commit can fall back to an earlier one.
- */
-export function groupPushes(
-  events: PushEvent[],
-  allowed: Set<string>,
-  { perRepo, maxRepos }: { perRepo: number; maxRepos: number },
-): PushGroup[] {
-  const groups = new Map<string, PushGroup>();
-  const pushes = events
-    .filter((e) => e.type === "PushEvent" && e.payload.head && allowed.has(e.repo.name.toLowerCase()))
-    .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
-  for (const e of pushes) {
-    const key = e.repo.name.toLowerCase();
-    let g = groups.get(key);
-    if (!g) {
-      if (groups.size >= maxRepos) continue;
-      g = { repo: e.repo.name, pushes: [] };
-      groups.set(key, g);
-    }
-    if (g.pushes.length < perRepo) g.pushes.push({ head: e.payload.head as string, at: e.created_at });
-  }
-  return [...groups.values()];
-}
-
 /** Housekeeping commits that say nothing about what was built. */
 export function isNoise(message: string): boolean {
   return (
@@ -77,6 +49,15 @@ export function isNoise(message: string): boolean {
 export function firstLine(message: string, max = 90): string {
   const line = message.split("\n")[0].trim();
   return line.length > max ? `${line.slice(0, max - 1)}…` : line;
+}
+
+/** The newest commit that is real work. GitHub lists commits newest first. */
+export function pickCommit(commits: ApiCommit[]): { message: string; url: string; at: string } | null {
+  for (const c of commits) {
+    const message = firstLine(c.commit.message);
+    if (!isNoise(message)) return { message, url: c.html_url, at: c.commit.committer.date };
+  }
+  return null;
 }
 
 const utcDay = (d: Date) => Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
