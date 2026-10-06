@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Priyanshu Tiwari — Portfolio
 
-## Getting Started
+A fast, static portfolio built with Next.js 16, TypeScript and Tailwind CSS. Everything on the page
+comes from one validated JSON file, so the content can be changed without touching any component.
+A password-protected edit mode (click-to-edit, add and remove projects, drag to reorder, save to GitHub)
+is being built on top of this, phase by phase.
 
-First, run the development server:
+## Status
+
+| Phase | What | State |
+|---|---|---|
+| 1 | Read-only site: content schema, all sections, dark and light themes | **Done** |
+| 2 | Live data: daily LeetCode numbers, recently shipped, "Try PolyO" box | Next |
+| 3 | Login: `/edit`, signed session cookie, security checks | Planned |
+| 4 | Edit mode: click-to-edit, add, delete, hide, reorder | Planned |
+| 5 | Saving: commits to this repo, image and résumé upload, history and undo | Planned |
+| 6 | Polish: Ctrl+K menu, link preview image, case-study pages | Planned |
+
+The full design is in [`docs/superpowers/specs/2026-10-07-portfolio-design.md`](docs/superpowers/specs/2026-10-07-portfolio-design.md)
+and the Phase 1 build plan is in [`docs/superpowers/plans/`](docs/superpowers/plans/2026-10-07-phase-1-read-only-site.md).
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Checks
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run typecheck        # TypeScript
+npm run lint             # ESLint
+npm test                 # unit tests (Vitest)
+npm run validate-content # content files against the schema
+npm run e2e              # builds, then runs the browser tests (Playwright)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`npm run build` runs `validate-content` first, so a broken content file can never be deployed.
 
-## Learn More
+## How the content works
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `content/site.json` holds everything that can be edited: profile, sections and their order,
+  projects, experience, education, skills and achievements. `lib/schema.ts` is the single source
+  of truth for what is allowed in it.
+- `data/leetcode.json` holds the LeetCode numbers. It will be refreshed daily by a GitHub Action
+  (Phase 2) and is never edited by hand.
+- Short **bold** phrases inside bullets are written as `**bold**`. No HTML is accepted anywhere.
+- Contact details are limited to email and profile links. There is deliberately no phone number
+  field, and a test fails if one ever appears.

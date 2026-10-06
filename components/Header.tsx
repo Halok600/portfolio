@@ -11,7 +11,7 @@ export function Header() {
         <a href="#hero" className="font-mono text-sm font-medium">
           {site.profile.name}
         </a>
-        <nav aria-label="Sections" className="hidden items-center gap-5 text-sm text-muted md:flex">
+        <nav aria-label="Sections" className="hidden items-center gap-4 whitespace-nowrap text-[0.8rem] text-muted lg:flex">
           {nav.map((s) => (
             <a key={s.id} href={`#${s.id}`} className="transition-colors hover:text-text">
               {s.title}
