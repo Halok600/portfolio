@@ -381,3 +381,10 @@ section.wrap { padding-top: clamp(60px, 9vw, 140px); }
   .pr { grid-template-columns: 1fr; }
   .pr-big { grid-template-columns: 1fr 1fr; gap: 12px; }
 }
+
+/* ---------- performance: don't lay out sections that are far below the screen ----------
+   The browser renders each section when it nears the viewport and remembers its real height. */
+section.wrap {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 720px;
+}

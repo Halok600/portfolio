@@ -349,26 +349,28 @@ not things that are secret.
 
 ### Recently shipped (GitHub)
 
-- The server fetches his **public** push events once an hour (Next.js `revalidate: 3600`) using the
-  same token, and shows the last 3–5 as "PolyO · 4 days ago".
-- Only public, non-archived repos. Repo names map to project titles where they match.
+- Once an hour (`use cache` + `cacheLife("hours")`) the server asks GitHub for the latest commits of each
+  project repo and shows the newest **real-work** commit per repo (up to four), e.g. "polyo · today".
+  (GitHub's public events feed was tried first and dropped: it lags by hours and no longer carries commit messages.)
+- Only repos that appear on the site (visible projects plus this portfolio). Housekeeping commits (chore, docs, ci,
+  merge, license, readme) are skipped. A `GITHUB_TOKEN` env var is optional and only raises the rate limit.
 - **Hidden automatically if the newest push is older than 30 days**, so the strip can never show
   inactivity. Can also be switched off by hand.
 - If the API fails, the strip simply doesn't render.
 
-### Try PolyO box
+### Try PolyO box (as built in Phase 2)
 
-- The browser calls `https://polyo-api.onrender.com/v1/predict` directly with `{ code, language }`.
-  Tested working on 6 Oct.
-- **Needs one change in the PolyO API:** add the portfolio's address to its CORS allow-list. Today
-  it only allows `https://polyo.vercel.app`, so calls from any other site are blocked.
-- 3 example snippets are preloaded (nested loop, binary search, recursive Fibonacci). Input is
-  capped at 5,000 characters.
-- Shows the **time** and **space** class plus confidence. It also shows **how it got the answer**
-  ("static analysis" or "learned model", from the API's `engine` field). This is honest, and it's an
-  interview talking point rather than a surprise.
-- If there's no answer after 5 seconds: "Waking up the server (free hosting sleeps)…". It gives up
-  at 60 seconds with a link to `polyo.vercel.app`.
+- The browser posts `{ code, language }` to **this site's own `/api/polyo`**, which checks the Origin, rate-limits
+  (12 a minute per caller), validates input (1 to 5,000 characters, six languages), forwards to
+  `polyo-api.onrender.com/v1/predict` with a 55 s timeout, validates the answer with a strict schema and returns only
+  the fields the page shows. This replaced the original plan of calling PolyO directly, so **no CORS change in the
+  PolyO repo was needed**.
+- A `GET /api/polyo` warm-up ping fires when the section nears the viewport, to wake the free-tier server.
+- A real sample result (nested loops) is shown, labelled as a sample, until the visitor runs something.
+- The result shows time and space in large type, PolyO's own step-by-step derivation, and a log-scale growth chart
+  (series that overflow at 2^64 are cut at the overflow point rather than drawn as a false plateau). The engine is
+  labelled honestly: "static analysis" or "learned model".
+- Slow first request (over 5 s): "Waking up PolyO's server..." message; errors offer retry and a link to the full app.
 
 ---
 
