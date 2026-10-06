@@ -36,3 +36,29 @@ describe("parseBold", () => {
     ]);
   });
 });
+
+import { parseEmphasis } from "@/lib/rich";
+
+describe("parseEmphasis", () => {
+  it("returns plain text unchanged", () => {
+    expect(parseEmphasis("plain")).toEqual([{ text: "plain", em: false }]);
+  });
+
+  it("marks _words_ as emphasis", () => {
+    expect(parseEmphasis("that _see_, _read code_ and _ship_.")).toEqual([
+      { text: "that ", em: false },
+      { text: "see", em: true },
+      { text: ", ", em: false },
+      { text: "read code", em: true },
+      { text: " and ", em: false },
+      { text: "ship", em: true },
+      { text: ".", em: false },
+    ]);
+  });
+
+  it("leaves underscores inside identifiers alone", () => {
+    expect(parseEmphasis("use snake_case_names")).toEqual([
+      { text: "use snake_case_names", em: false },
+    ]);
+  });
+});
