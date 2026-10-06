@@ -1,29 +1,31 @@
 import { site } from "@/lib/content";
-import { ExtLink, SectionShell } from "@/components/ui";
+import { Reveal } from "@/components/Reveal";
+import { SectionHead } from "@/components/SectionHead";
 
 export function Achievements({ title }: { title: string }) {
   const items = site.achievements.filter((a) => a.visible);
   if (items.length === 0) return null;
   return (
-    <SectionShell id="achievements" title={title}>
-      <ul className="space-y-4">
+    <section className="wrap" id="achievements" aria-labelledby="achievements-title">
+      <Reveal>
+        <SectionHead id="achievements" title={title} />
         {items.map((a) => (
-          <li key={a.id}>
-            <p className="font-semibold">{a.title}</p>
-            <p className="text-muted">
+          <div key={a.id} className="ac">
+            <b>{a.title}</b>
+            <p>
               {a.text}
               {a.link && (
                 <>
                   {" "}
-                  <ExtLink href={a.link} className="underline decoration-line underline-offset-4 hover:text-accent">
-                    Link
-                  </ExtLink>
+                  <a href={a.link} target="_blank" rel="noopener noreferrer" style={{ borderBottom: "1px solid var(--line)" }}>
+                    Link ↗
+                  </a>
                 </>
               )}
             </p>
-          </li>
+          </div>
         ))}
-      </ul>
-    </SectionShell>
+      </Reveal>
+    </section>
   );
 }

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const ACCENTS = ["cyan", "violet", "green", "amber", "rose", "blue"] as const;
+export const ACCENTS = ["signal", "ultraviolet", "amber", "mint", "rose", "ice"] as const;
 export const SECTION_IDS = [
   "hero", "tryPolyo", "featured", "projects", "experience",
   "dsa", "skills", "achievements", "education", "contact",
@@ -44,6 +44,8 @@ const Project = z.strictObject({
   slug: idStr,
   title: text(80),
   oneLiner: text(300),
+  kind: text(40).optional(),
+  highlights: z.array(text(30)).max(4).optional(),
   stack: z.array(text(40)).max(12),
   bullets: z.array(text(500)).max(10),
   links: z.strictObject({ github: httpUrl.optional(), live: httpUrl.optional() }),
@@ -98,6 +100,7 @@ export const SiteSchema = z.strictObject({
   }),
   profile: z.strictObject({
     name: text(60),
+    role: text(60),
     headline: text(120),
     tagline: text(240),
     status: z.strictObject({ show: z.boolean(), text: text(120) }),

@@ -1,70 +1,66 @@
-import { formatDate, leetcode, site } from "@/lib/content";
-import { ExtLink, SectionShell } from "@/components/ui";
-
-function Stat({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
-  return (
-    <div className={`rounded-xl border p-4 ${highlight ? "border-accent" : "border-line"} bg-surface`}>
-      <dd className={`font-mono text-3xl font-semibold ${highlight ? "text-accent" : ""}`}>{value}</dd>
-      <dt className="mt-1 text-sm text-muted">{label}</dt>
-    </div>
-  );
-}
+import { formatDate, leetcode as lc, site } from "@/lib/content";
+import { Reveal } from "@/components/Reveal";
+import { SectionHead } from "@/components/SectionHead";
 
 export function Dsa({ title }: { title: string }) {
   const { show, streakMinimum } = site.dsa;
-  const lc = leetcode;
-  const parts = [
-    { label: "Easy", n: lc.easy, opacity: "opacity-40" },
-    { label: "Medium", n: lc.medium, opacity: "opacity-70" },
-    { label: "Hard", n: lc.hard, opacity: "opacity-100" },
-  ];
   const total = lc.easy + lc.medium + lc.hard || 1;
 
+  // The big numeral is "solved" when shown, otherwise the Hard count.
+  const bigIsSolved = show.solved;
+  const bigValue = bigIsSolved ? lc.solved : lc.hard;
+  const bigLabel = bigIsSolved ? "solved" : "hard";
+  const showBig = show.solved || show.hard;
+  const showHardLine = show.hard && show.solved;
+
+  const notes: string[] = [];
+  if (show.activeDays) notes.push(`${lc.activeDays} active days`);
+  if (show.streak && lc.streak >= streakMinimum) notes.push(`${lc.streak}-day streak`);
+  if (show.contestRating) notes.push(`contest rating ${Math.round(lc.rating)}`);
+  if (show.topPercent) notes.push(`top ${Math.round(lc.topPercent)}% in contests`);
+
   return (
-    <SectionShell id="dsa" title={title}>
-      <dl className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        {show.solved && <Stat label="problems solved" value={String(lc.solved)} />}
-        {show.hard && <Stat label="Hard solved" value={String(lc.hard)} highlight />}
-        {show.activeDays && <Stat label="active days" value={String(lc.activeDays)} />}
-        {show.streak && lc.streak >= streakMinimum && (
-          <Stat label="day streak" value={String(lc.streak)} />
-        )}
-        {show.contestRating && <Stat label="contest rating" value={String(Math.round(lc.rating))} />}
-        {show.topPercent && <Stat label="contest percentile (top)" value={`${Math.round(lc.topPercent)}%`} />}
-      </dl>
-
-      {show.byDifficulty && (
-        <div className="mt-6">
-          <div
-            role="img"
-            aria-label={`${lc.easy} easy, ${lc.medium} medium, ${lc.hard} hard`}
-            className="flex h-3 overflow-hidden rounded-full bg-line"
-          >
-            {parts.map((p) => (
-              <div
-                key={p.label}
-                className={`bg-accent ${p.opacity}`}
-                style={{ width: `${(p.n / total) * 100}%` }}
-              />
-            ))}
+    <section className="wrap" id="dsa" aria-labelledby="dsa-title">
+      <Reveal>
+        <SectionHead id="dsa" title={title} note="live from LeetCode" />
+        <div className="ps">
+          {showBig && (
+            <div className="num">
+              {bigValue}
+              <sup>{bigLabel}</sup>
+            </div>
+          )}
+          <div className="col">
+            {showHardLine && (
+              <div className="hard">
+                <b>{lc.hard}</b>
+                <span className="mono">of them Hard</span>
+              </div>
+            )}
+            {show.byDifficulty && (
+              <div>
+                <div className="bar" role="img" aria-label={`${lc.easy} easy, ${lc.medium} medium, ${lc.hard} hard`}>
+                  <i style={{ flex: lc.easy / total }} />
+                  <i style={{ flex: lc.medium / total }} />
+                  <i style={{ flex: lc.hard / total }} />
+                </div>
+                <div className="legend mono">
+                  <span>Easy {lc.easy}</span>
+                  <span>Medium {lc.medium}</span>
+                  <span>Hard {lc.hard}</span>
+                </div>
+              </div>
+            )}
+            <div className="mono foot-note">
+              {notes.length > 0 && <>{notes.join(" · ")} · </>}
+              updated {formatDate(lc.fetchedAt)} ·{" "}
+              <a href={site.profile.links.leetcode} target="_blank" rel="noopener noreferrer" style={{ borderBottom: "1px solid var(--line)" }}>
+                profile ↗
+              </a>
+            </div>
           </div>
-          <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-1 font-mono text-sm text-muted">
-            {parts.map((p) => (
-              <li key={p.label}>
-                {p.label} {p.n}
-              </li>
-            ))}
-          </ul>
         </div>
-      )}
-
-      <p className="mt-6 text-sm text-muted">
-        From{" "}
-        <ExtLink href={site.profile.links.leetcode} className="underline decoration-line underline-offset-4 hover:text-accent">
-          LeetCode
-        </ExtLink>
-        , updated {formatDate(lc.fetchedAt)}.
-      </p>
-    </SectionShell>
+      </Reveal>
+    </section>
   );
 }

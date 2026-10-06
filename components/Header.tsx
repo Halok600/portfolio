@@ -1,24 +1,25 @@
-import { site, visibleSections } from "@/lib/content";
+import { site } from "@/lib/content";
+import { LocalTime } from "@/components/LocalTime";
+import { Ruler } from "@/components/Ruler";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
-const NAV_SKIP = new Set(["hero", "tryPolyo"]);
-
 export function Header() {
-  const nav = visibleSections().filter((s) => !NAV_SKIP.has(s.id));
+  const city = site.profile.location.split(",")[0];
   return (
-    <header className="sticky top-0 z-20 border-b border-line bg-bg/85 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4 sm:px-6">
-        <a href="#hero" className="font-mono text-sm font-medium">
-          {site.profile.name}
-        </a>
-        <nav aria-label="Sections" className="hidden items-center gap-4 whitespace-nowrap text-[0.8rem] text-muted lg:flex">
-          {nav.map((s) => (
-            <a key={s.id} href={`#${s.id}`} className="transition-colors hover:text-text">
-              {s.title}
-            </a>
-          ))}
-        </nav>
-        <ThemeToggle />
+    <header className="top">
+      <div className="wrap">
+        <div className="brand mono">
+          <span className="dot" aria-hidden="true" />
+          <span>{site.profile.name}</span>
+        </div>
+        <Ruler />
+        <div className="actions mono">
+          <LocalTime city={city} className="time" />
+          <ThemeToggle />
+          <a className="cta" href={site.profile.resumePdf}>
+            Résumé ↓
+          </a>
+        </div>
       </div>
     </header>
   );

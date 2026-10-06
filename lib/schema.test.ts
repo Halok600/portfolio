@@ -4,9 +4,10 @@ import { SiteSchema } from "@/lib/schema";
 function minimalSite() {
   return {
     version: 1,
-    settings: { accent: "cyan", defaultTheme: "dark" },
+    settings: { accent: "signal", defaultTheme: "dark" },
     profile: {
       name: "A B",
+      role: "Engineer",
       headline: "Engineer",
       tagline: "Builds things.",
       status: { show: true, text: "Open to work" },
@@ -96,6 +97,28 @@ describe("SiteSchema", () => {
   it("rejects unknown keys, so a stray phone field can never slip in", () => {
     const s = minimalSite();
     (s.profile as Record<string, unknown>).phone = "123";
+    expect(SiteSchema.safeParse(s).success).toBe(false);
+  });
+  it("accepts kind and highlights on a project", () => {
+    const s = minimalSite() as ReturnType<typeof minimalSite> & {
+      projects: { kind?: string; highlights?: string[] }[];
+    };
+    s.projects[0].kind = "Computer vision";
+    s.projects[0].highlights = ["YOLOv8", "ONNX"];
+    expect(SiteSchema.safeParse(s).success).toBe(true);
+  });
+
+  it("rejects more than four highlights", () => {
+    const s = minimalSite() as ReturnType<typeof minimalSite> & {
+      projects: { highlights?: string[] }[];
+    };
+    s.projects[0].highlights = ["a", "b", "c", "d", "e"];
+    expect(SiteSchema.safeParse(s).success).toBe(false);
+  });
+
+  it("rejects the retired cyan accent", () => {
+    const s = minimalSite();
+    (s.settings as { accent: string }).accent = "cyan";
     expect(SiteSchema.safeParse(s).success).toBe(false);
   });
 });

@@ -1867,7 +1867,7 @@ test("hidden projects do not appear", async ({ page }) => {
 test("shows no phone number and no ISRO claim", async ({ page }) => {
   await page.goto("/");
   const body = page.locator("body");
-  await expect(body).not.toContainText("XXXXXXXXXX");
+  expect(text).not.toMatch(/\b\d{10}\b/);
   await expect(body).not.toContainText("+91");
   await expect(body).not.toContainText("ISRO");
 });
