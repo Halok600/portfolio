@@ -48,10 +48,10 @@ test("hidden projects do not appear", async ({ page }) => {
 
 test("shows no phone number and no ISRO claim", async ({ page }) => {
   await page.goto("/");
-  const body = page.locator("body");
-  await expect(body).not.toContainText("XXXXXXXXXX");
-  await expect(body).not.toContainText("+91");
-  await expect(body).not.toContainText("ISRO");
+  const text = await page.locator("body").innerText();
+  expect(text).not.toMatch(/\+\s?91/);
+  expect(text).not.toMatch(/\b\d{10}\b/);
+  expect(text).not.toContain("ISRO");
 });
 
 test("contest rating is hidden by default", async ({ page }) => {
