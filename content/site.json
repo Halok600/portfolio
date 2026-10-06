@@ -414,6 +414,7 @@
       "hard": true,
       "activeDays": true,
       "streak": true,
+      "heatmap": true,
       "contestRating": false,
       "topPercent": false
     },

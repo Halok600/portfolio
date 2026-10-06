@@ -1,0 +1,39 @@
+name: Refresh LeetCode data
+
+# 03:00 IST every day. Commits only when the numbers actually changed, and the commit
+# is authored by Priyanshu himself, so he stays the only contributor on the repo.
+on:
+  schedule:
+    - cron: "30 21 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: leetcode-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Fetch LeetCode data
+        run: npm run fetch-leetcode
+      - name: Commit if the data changed
+        run: |
+          if git diff --quiet -- data/leetcode.json; then
+            echo "No change in LeetCode data; nothing to commit."
+            exit 0
+          fi
+          git config user.name "Priyanshu Kumar Tiwari"
+          git config user.email "143282195+Halok600@users.noreply.github.com"
+          git add data/leetcode.json
+          git commit -m "chore: refresh LeetCode data"
+          git push

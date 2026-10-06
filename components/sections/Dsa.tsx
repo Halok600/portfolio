@@ -1,4 +1,6 @@
 import { formatDate, leetcode as lc, site } from "@/lib/content";
+import { buildHeatmap } from "@/lib/leetcode-calendar";
+import { Heatmap } from "@/components/dsa/Heatmap";
 import { Reveal } from "@/components/Reveal";
 import { SectionHead } from "@/components/SectionHead";
 
@@ -14,10 +16,17 @@ export function Dsa({ title }: { title: string }) {
   const showHardLine = show.hard && show.solved;
 
   const notes: string[] = [];
-  if (show.activeDays) notes.push(`${lc.activeDays} active days`);
-  if (show.streak && lc.streak >= streakMinimum) notes.push(`${lc.streak}-day streak`);
   if (show.contestRating) notes.push(`contest rating ${Math.round(lc.rating)}`);
   if (show.topPercent) notes.push(`top ${Math.round(lc.topPercent)}% in contests`);
+
+  // The heatmap window ends on the day the data was fetched, so the page never depends on "today".
+  const hm = buildHeatmap(lc.calendar, lc.fetchedAt.slice(0, 10));
+  const stats: string[] = [];
+  if (show.activeDays) stats.push(`${hm.activeDays} active days`);
+  if (show.streak && hm.longestStreak > 0) stats.push(`longest streak ${hm.longestStreak} days`);
+  if (show.streak && hm.currentStreak >= streakMinimum) stats.push(`current streak ${hm.currentStreak} days`);
+  if (hm.busiest) stats.push(`busiest month ${hm.busiest.label}`);
+  const summary = `${hm.total} submissions in the past year, ${hm.activeDays} active days, longest streak ${hm.longestStreak} days.`;
 
   return (
     <section className="wrap" id="dsa" aria-labelledby="dsa-title">
@@ -51,15 +60,38 @@ export function Dsa({ title }: { title: string }) {
                 </div>
               </div>
             )}
-            <div className="mono foot-note">
-              {notes.length > 0 && <>{notes.join(" · ")} · </>}
-              updated {formatDate(lc.fetchedAt)} ·{" "}
-              <a href={site.profile.links.leetcode} target="_blank" rel="noopener noreferrer" style={{ borderBottom: "1px solid var(--line)" }}>
-                profile ↗
-              </a>
-            </div>
+            {notes.length > 0 && <div className="mono foot-note">{notes.join(" · ")}</div>}
           </div>
         </div>
+
+        {show.heatmap && (
+          <div className="hm-card">
+            <div className="hm-head">
+              <p className="hm-title">
+                <b>{hm.total}</b> submissions in the past year
+              </p>
+              {stats.length > 0 && <p className="mono hm-stats">{stats.join(" · ")}</p>}
+            </div>
+            <Heatmap weeks={hm.weeks} months={hm.months} summary={summary} />
+            <div className="hm-foot mono">
+              <span>
+                updated {formatDate(lc.fetchedAt)} ·{" "}
+                <a href={site.profile.links.leetcode} target="_blank" rel="noopener noreferrer">
+                  profile ↗
+                </a>
+              </span>
+              <span className="hm-key" aria-hidden="true">
+                Less
+                <svg viewBox="0 0 12 12" width="12" height="12"><rect width="12" height="12" rx="2.5" className="c l0" /></svg>
+                <svg viewBox="0 0 12 12" width="12" height="12"><rect width="12" height="12" rx="2.5" className="c l1" /></svg>
+                <svg viewBox="0 0 12 12" width="12" height="12"><rect width="12" height="12" rx="2.5" className="c l2" /></svg>
+                <svg viewBox="0 0 12 12" width="12" height="12"><rect width="12" height="12" rx="2.5" className="c l3" /></svg>
+                <svg viewBox="0 0 12 12" width="12" height="12"><rect width="12" height="12" rx="2.5" className="c l4" /></svg>
+                More
+              </span>
+            </div>
+          </div>
+        )}
       </Reveal>
     </section>
   );
