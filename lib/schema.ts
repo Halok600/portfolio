@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const ACCENTS = ["signal", "ultraviolet", "amber", "mint", "rose", "ice"] as const;
 export const SECTION_IDS = [
-  "hero", "tryPolyo", "featured", "projects", "experience",
+  "hero", "tryPolyo", "featured", "projects", "shipped", "experience",
   "dsa", "skills", "achievements", "education", "contact",
 ] as const;
 

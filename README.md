@@ -10,7 +10,7 @@ is being built on top of this, phase by phase.
 | Phase | What | State |
 |---|---|---|
 | 1 | Read-only site: content schema, all sections, dark and light themes | **Done** |
-| 2 | Live data: daily LeetCode numbers, recently shipped, "Try PolyO" box | Next |
+| 2 | Live data: daily LeetCode refresh, recently shipped, "Try PolyO" box | **Done** |
 | 3 | Login: `/edit`, signed session cookie, security checks | Planned |
 | 4 | Edit mode: click-to-edit, add, delete, hide, reorder | Planned |
 | 5 | Saving: commits to this repo, image and résumé upload, history and undo | Planned |
@@ -43,8 +43,16 @@ npm run e2e              # builds, then runs the browser tests (Playwright)
 - `content/site.json` holds everything that can be edited: profile, sections and their order,
   projects, experience, education, skills and achievements. `lib/schema.ts` is the single source
   of truth for what is allowed in it.
-- `data/leetcode.json` holds the LeetCode numbers. It will be refreshed daily by a GitHub Action
-  (Phase 2) and is never edited by hand.
+- `data/leetcode.json` holds the LeetCode numbers and the year's submission calendar. A GitHub Action
+  refreshes it daily (`npm run fetch-leetcode` does the same by hand) and only commits when something changed.
 - Short **bold** phrases inside bullets are written as `**bold**`. No HTML is accepted anywhere.
 - Contact details are limited to email and profile links. There is deliberately no phone number
   field, and a test fails if one ever appears.
+
+## Live pieces
+
+- **Try PolyO** posts to this site's own `/api/polyo`, which validates the input, rate-limits, and forwards to the
+  PolyO API. A sample result is shown until the visitor runs something.
+- **Recently shipped** reads the latest real-work commit of each project repo from GitHub (cached for an hour) and
+  hides itself if GitHub is unreachable or nothing is recent.
+- **Daily LeetCode refresh** (`.github/workflows/leetcode.yml`) commits as the repo owner, never as a bot.

@@ -44,6 +44,11 @@
       "visible": true
     },
     {
+      "id": "shipped",
+      "title": "Recently shipped",
+      "visible": true
+    },
+    {
       "id": "experience",
       "title": "Experience",
       "visible": true
