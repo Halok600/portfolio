@@ -118,25 +118,25 @@
       "id": "aerial-guardian",
       "slug": "aerial-guardian",
       "title": "The Aerial Guardian",
-      "oneLiner": "Real-time multi-object tracking for drone footage that runs fully client-side in the browser.",
+      "oneLiner": "Multi-object tracking for drone footage: a YOLO26-P2 detector and a from-scratch ByteTrack with camera-motion compensation, with a live demo that runs entirely in the browser.",
       "kind": "Computer vision",
       "highlights": [
-        "YOLOv8",
+        "YOLO26-P2",
         "ByteTrack",
         "ONNX Web"
       ],
       "stack": [
         "Python",
         "PyTorch",
-        "YOLOv8",
+        "YOLO26",
         "OpenCV",
         "ONNX Runtime Web",
         "JavaScript"
       ],
       "bullets": [
-        "Built a **real-time multi-object tracking system** for drone video that runs **entirely client-side in the browser**, porting both detector and tracker to **ONNX Runtime Web** so the video never leaves the user's device.",
-        "Stock YOLOv8 misses people in aerial footage because they are only **8 to 16 pixels tall**, so added a **high-resolution stride-4 detection head** to the network and retrained it on the **VisDrone** dataset on a single 6 GB laptop GPU.",
-        "**Implemented ByteTrack from scratch**: a **Kalman filter** for motion prediction plus **three-stage Hungarian matching** to hold object identities through occlusion, with **OpenCV** cancelling the drone's own camera motion."
+        "Built a **multi-object tracker for drone video** that runs **entirely client-side in the browser**: a **YOLO26n-P2** detector on **ONNX Runtime Web** (WebGPU, falling back to WASM) and a JavaScript port of the tracker checked against fixtures from the Python one, so the video never leaves the user's device.",
+        "People in aerial footage are only about **12 by 25 pixels**, so added a **stride-4 (P2) detection head** to YOLO26 and retrained it on **VisDrone**, lifting person recall on the DET-val images from **2.8% to 48.8%** (62.5% for the larger model) after finding the first model was probably trained from scratch.",
+        "**Wrote ByteTrack from scratch** (Kalman filter, Hungarian matching, class-group gating) with **OpenCV ECC camera-motion compensation**. On VisDrone MOT-test-dev, person HOTA is **40.2 vs 34.3** for Ultralytics' default ByteTrack and ID switches drop from 1,443 to 577; vehicle HOTA is **61.7 vs 53.8**."
       ],
       "links": {
         "github": "https://github.com/Halok600/The-Aerial-Guardian",
