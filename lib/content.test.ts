@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import {
   featuredProjects, formatDate, gridProjects, leetcode, site, visibleSections,
 } from "@/lib/content";
-import { buildHeatmap } from "@/lib/leetcode-calendar";
+import { buildHeatmap } from "@/lib/calendar";
 
 const raw = (rel: string) => readFileSync(path.join(process.cwd(), rel), "utf8");
 

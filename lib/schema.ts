@@ -126,7 +126,6 @@ export const SiteSchema = z.strictObject({
       hard: z.boolean(),
       activeDays: z.boolean(),
       streak: z.boolean(),
-      heatmap: z.boolean(),
       contestRating: z.boolean(),
       topPercent: z.boolean(),
     }),
@@ -134,6 +133,7 @@ export const SiteSchema = z.strictObject({
   }),
   recentlyShipped: z.strictObject({
     show: z.boolean(),
+    showGraph: z.boolean(),
     hideIfOlderThanDays: z.number().int().min(1).max(365),
   }),
 });

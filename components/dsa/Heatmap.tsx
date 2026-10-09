@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
-import type { Cell, MonthLabel } from "@/lib/leetcode-calendar";
+import type { Cell, MonthLabel } from "@/lib/calendar";
 
 const CELL = 12;
 const GAP = 3;
@@ -19,18 +19,19 @@ const fmt = new Intl.DateTimeFormat("en-GB", {
   weekday: "short", day: "numeric", month: "short", year: "numeric", timeZone: "UTC",
 });
 
-function describe(c: Cell): string {
+function describe(c: Cell, unit: string): string {
   const when = fmt.format(new Date(`${c.date}T00:00:00Z`));
-  const what = c.count === 0 ? "No submissions" : `${c.count} submission${c.count === 1 ? "" : "s"}`;
+  const what = c.count === 0 ? `No ${unit}s` : `${c.count} ${unit}${c.count === 1 ? "" : "s"}`;
   return `${what} · ${when}`;
 }
 
 export function Heatmap({
-  weeks, months, summary,
+  weeks, months, summary, unit,
 }: {
   weeks: (Cell | null)[][];
   months: MonthLabel[];
   summary: string;
+  unit: string; // singular, e.g. "contribution"
 }) {
   const [active, setActive] = useState<Active | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -155,12 +156,12 @@ export function Heatmap({
                 top: `${((active.d * PITCH - BOX) / H) * 100}%`,
               }}
             >
-              {describe(cell)}
+              {describe(cell, unit)}
             </div>
           )}
         </div>
         <p className="sr" aria-live="polite">
-          {cell ? describe(cell) : ""}
+          {cell ? describe(cell, unit) : ""}
         </p>
       </div>
     </div>

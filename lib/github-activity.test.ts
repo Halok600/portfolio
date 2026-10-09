@@ -3,6 +3,7 @@ import {
   allowedRepos, firstLine, isFresh, isNoise, pickCommit, relativeTime, repoFromUrl,
 } from "@/lib/github-activity";
 import { site } from "@/lib/content";
+import { profileName } from "@/lib/github-activity";
 
 const NOW = new Date("2026-10-07T12:00:00Z");
 
@@ -93,5 +94,17 @@ describe("isFresh", () => {
   it("compares against the maximum age in days", () => {
     expect(isFresh("2026-09-20T00:00:00Z", NOW, 30)).toBe(true);
     expect(isFresh("2026-08-01T00:00:00Z", NOW, 30)).toBe(false);
+  });
+});
+
+describe("profileName", () => {
+  it("reads the username from a profile URL", () => {
+    expect(profileName("https://github.com/Halok600")).toBe("Halok600");
+    expect(profileName("https://leetcode.com/u/Halok600/")).toBe("Halok600");
+  });
+
+  it("returns null when there is no username", () => {
+    expect(profileName("https://github.com/")).toBeNull();
+    expect(profileName("not a url")).toBeNull();
   });
 });
