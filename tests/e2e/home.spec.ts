@@ -1,4 +1,8 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { expect, test } from "@playwright/test";
+
+const { solved } = JSON.parse(readFileSync(path.join(process.cwd(), "data/leetcode.json"), "utf8"));
 
 test("renders the main content and logs no console errors", async ({ page }) => {
   const errors: string[] = [];
@@ -14,7 +18,9 @@ test("renders the main content and logs no console errors", async ({ page }) => 
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
   }
   await expect(page.getByText("Embedded Systems Intern").first()).toBeVisible();
-  await expect(page.locator(".ps .num")).toContainText("603");
+  // the page reads LeetCode live, so it may be ahead of the committed fallback but never behind it
+  const shown = Number(((await page.locator(".ps .num").textContent()) ?? "").match(/\d+/)?.[0]);
+  expect(shown).toBeGreaterThanOrEqual(solved);
   expect(errors).toEqual([]);
 });
 

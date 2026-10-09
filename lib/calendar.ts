@@ -1,5 +1,4 @@
-// Pure calendar maths for the LeetCode heatmap. All dates are UTC ISO strings (YYYY-MM-DD),
-// matching how LeetCode buckets submissions.
+// Pure calendar maths for the contribution heatmap. All dates are UTC ISO strings (YYYY-MM-DD).
 
 export type Level = 0 | 1 | 2 | 3 | 4;
 export type Cell = { date: string; count: number; level: Level };

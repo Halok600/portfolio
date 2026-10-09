@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildHeatmap, levelFor } from "@/lib/leetcode-calendar";
+import { buildHeatmap, levelFor } from "@/lib/calendar";
 
 const END = "2026-10-07"; // a Wednesday; the window then starts Wed 2025-10-08
 

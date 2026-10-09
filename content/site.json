@@ -419,7 +419,6 @@
       "hard": true,
       "activeDays": true,
       "streak": true,
-      "heatmap": true,
       "contestRating": false,
       "topPercent": false
     },
@@ -427,6 +426,7 @@
   },
   "recentlyShipped": {
     "show": true,
+    "showGraph": true,
     "hideIfOlderThanDays": 30
   }
 }

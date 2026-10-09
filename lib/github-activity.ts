@@ -24,6 +24,15 @@ export function repoFromUrl(url: string): string | null {
   }
 }
 
+/** The username in a profile URL (the last path segment), or null when there is none. */
+export function profileName(url: string): string | null {
+  try {
+    return new URL(url).pathname.split("/").filter(Boolean).pop() ?? null;
+  } catch {
+    return null;
+  }
+}
+
 /** Repos the strip may show: visible projects on the site, plus this portfolio itself. */
 export function allowedRepos(site: Site): Set<string> {
   const set = new Set<string>();

@@ -336,7 +336,14 @@ not things that are secret.
 
 ## 11. Live data
 
-### LeetCode (daily GitHub Action)
+### LeetCode (live, with the daily Action as backup)
+
+*Changed 8 Oct 2026:* the page now fetches LeetCode itself, so the numbers can never lag a day behind.
+`lib/leetcode-live.ts` asks LeetCode's GraphQL endpoint on the server (`use cache`, one hour; a failed fetch is
+cached for only 5 minutes) and validates the reply with `LeetcodeSchema`. If the fetch fails it falls back to
+`data/leetcode.json`, and the section note then reads "from LeetCode, <date>" instead of "live from LeetCode".
+The submission **heatmap was removed** from this section (it is now a one-line stats text); the visual graph is the
+GitHub one below. The daily Action stays as the fallback source:
 
 - `.github/workflows/leetcode.yml` runs every day at **03:00 IST** (`30 21 * * *` UTC), and can also
   be run by hand.
@@ -357,6 +364,16 @@ not things that are secret.
 - **Hidden automatically if the newest push is older than 30 days**, so the strip can never show
   inactivity. Can also be switched off by hand.
 - If the API fails, the strip simply doesn't render.
+
+### GitHub contribution graph (inside "Recently shipped")
+
+- `lib/github-graph.ts` reads the public graph every profile serves (`github.com/users/<name>/contributions`,
+  no token) and `lib/github-contributions.ts` parses it: each day is a `<td data-date id>` cell and its count is the
+  text of a `<tool-tip for=id>`. Cached for an hour; a failure is cached for 5 minutes and the graph is left out.
+- Drawn by the same `components/dsa/Heatmap.tsx` (hover, tap and keyboard) with the unit "contribution".
+- Switched on or off by `recentlyShipped.showGraph`. The section hides only when both the commits and the graph are empty.
+- Risk: GitHub could change that markup. The parser returns an empty result for an unrecognised page and the graph
+  hides itself; the unit tests pin the current markup.
 
 ### Try PolyO box (as built in Phase 2)
 

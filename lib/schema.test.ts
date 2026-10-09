@@ -41,11 +41,11 @@ function minimalSite() {
     dsa: {
       show: {
         solved: true, byDifficulty: true, hard: true, activeDays: true,
-        streak: true, heatmap: true, contestRating: false, topPercent: false,
+        streak: true, contestRating: false, topPercent: false,
       },
       streakMinimum: 7,
     },
-    recentlyShipped: { show: true, hideIfOlderThanDays: 30 },
+    recentlyShipped: { show: true, showGraph: true, hideIfOlderThanDays: 30 },
   };
 }
 
