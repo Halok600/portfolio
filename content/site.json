@@ -175,7 +175,8 @@
         "live": "https://enagram-io.vercel.app"
       },
       "featured": true,
-      "visible": true
+      "visible": true,
+      "image": "/uploads/enagram.jpg"
     },
     {
       "id": "weaponshield",
