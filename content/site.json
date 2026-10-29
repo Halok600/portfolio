@@ -301,6 +301,22 @@
   ],
   "experience": [
     {
+      "id": "digiliquid",
+      "org": "Digiliquid",
+      "role": "Software Intern",
+      "location": "Noida, India (Remote)",
+      "start": "Jun 2026",
+      "end": "Sep 2026",
+      "bullets": [
+        "Supported **backend operations** and **e-commerce tooling** for direct-to-consumer brands, working across **data migration**, quality assurance and automated insights for the development team.",
+        "Streamlined **client database migrations** and eliminated manual data-entry errors by writing **Python scripts** that cleaned and reformatted raw product data ahead of each import.",
+        "Verified reliable backend deployments by rigorously testing internal **REST APIs** in **Postman** and confirming accurate **JSON payload** structures before release.",
+        "Improved internal dashboard usability by resolving **frontend UI bugs** and fixing component layout rendering for the development team.",
+        "Automated customer feedback analysis by building a Python **NLP pipeline** that categorized batch product reviews by sentiment, surfacing product issues for the team."
+      ],
+      "visible": true
+    },
+    {
       "id": "india-space-lab",
       "org": "India Space Lab",
       "role": "Embedded Systems Intern",

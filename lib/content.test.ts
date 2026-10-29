@@ -56,6 +56,13 @@ describe("seed content", () => {
     expect(e?.end).toBe("Jul 2025");
   });
 
+  it("shows Digiliquid as the most recent experience, as Software Intern", () => {
+    expect(site.experience[0].org).toBe("Digiliquid");
+    expect(site.experience[0].role).toBe("Software Intern");
+    expect(site.experience[0].start).toBe("Jun 2026");
+    expect(site.experience[0].end).toBe("Sep 2026");
+  });
+
   it("has the three featured projects first", () => {
     expect(featuredProjects().map((p) => p.title)).toEqual([
       "PolyO", "The Aerial Guardian", "Enagram.io",

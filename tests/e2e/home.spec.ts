@@ -13,7 +13,7 @@ test("renders the main content and logs no console errors", async ({ page }) => 
   await expect(page.getByRole("heading", { level: 1, name: "Priyanshu Tiwari" })).toBeVisible();
   for (const name of [
     "PolyO", "The Aerial Guardian", "Enagram.io", "WeaponShield AI",
-    "India Space Lab", "Jaypee Institute of Information Technology",
+    "Digiliquid", "India Space Lab", "Jaypee Institute of Information Technology",
   ]) {
     await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
   }
